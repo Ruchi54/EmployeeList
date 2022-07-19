@@ -6,25 +6,6 @@ import "../style.css";
 const List = () => {
   return (
     <div className="main_row">
-      {/*<div className="list" style={{ backgroundColor: "#aaa" }}>
-
-      <div className='row_small'>
-        <h2>Column 1</h2>
-        <p>Some text..</p>
-      </div>
-
-      <div className='row_small'>
-        <h2>Column 2</h2>
-        <p>Some text..</p>
-      </div>
-
-      <div className='row_small'>
-        <h2>Column 2</h2>
-        <p>Some text..</p>
-      </div>
-
-</div>*/}
-
       <div className="row">
         <div className="column_List">
           <Table singleLine className="table table-striped">

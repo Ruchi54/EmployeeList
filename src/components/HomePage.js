@@ -212,19 +212,6 @@ const HomePage = () => {
 
   return (
     <div>
-      {/*<nav>
-        <div>
-          Employee
-          <button className="btn" onClick={() => Setactive("List")}>
-            <i className="fa fa-bars"></i> List
-          </button>
-          <button className="btn active" onClick={() => Setactive("Grid")}>
-            Grid
-          </button>
-          <button onClick={togglePopup}>Add Employee</button>
-        </div>
-  </nav>*/}
-
       <nav className="navbar navbar-light bg-light">
         <div className="container-fluid">
           <a className="navbar-brand" style={{ fontWeight: "bold" }}>
