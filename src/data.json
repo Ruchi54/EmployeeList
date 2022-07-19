@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "path":"./Employee/14a0679566439f5a0f044226d6203081.jpeg",
+        "name": "John Doe",
+        "empid": "FT-007",
+        "email": "bernardogaliv@example.com",
+        "mobile": 9876578596,
+        "joindate": "1 Jan 2013",
+        "Role": "Web Developer"
+    },
+
+    {
+        "id": 2,
+        "path":"./Employee/a66a509684552fb5d253c127d985b7ca.jpeg",
+        "name": "John Smith",
+        "empid": "FT-006",
+        "email": "johnsmith@example.com",
+        "mobile": 9874524125,
+        "joindate": "1 Apr 2014",
+        "Role": "Tester"
+    },
+
+    {
+        "id": 3,
+        "path":"./Employee/1a6654aa9e8ad1ed96407779f154c9f8.jpeg",
+        "name": "Lesley Grauer",
+        "empid": "FT-005",
+        "email": "lesleygrauer@example.com",
+        "mobile": 9748589658,
+        "joindate": "1 May 2011",
+        "Role": "Team Leader"
+    },
+
+    {
+        "id": 4,
+        "path":"./Employee/fbac3ee385d98f5488831ee1be8ba4cd.jpeg",
+        "name": "Elina Stankovik",
+        "empid": "FT-010",
+        "email": "elinastankovik@example.com",
+        "mobile": 9658745215,
+        "joindate": "1 Jan 2011",
+        "Role": "Web Developer"
+    },
+
+    {
+        "id": 5,
+        "path":"./Employee/fc5318f2076b5a261b6314b038821329.jpeg",
+        "name": "Mike Litorus",
+        "empid": "FT-011",
+        "email": "mikelitorus@example.com",
+        "mobile": 8745858965,
+        "joindate": "1 Feb 2019",
+        "Role": "Web Developer"
+    }
+
+]
