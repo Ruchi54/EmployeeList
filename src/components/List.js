@@ -1,9 +1,10 @@
-import React from "react";
-import Data from "../data.json";
+import React, { useState } from "react";
+
 import { Table } from "semantic-ui-react";
+
 import "../style.css";
 
-const List = () => {
+const List = (props) => {
   return (
     <div className="main_row">
       <div className="row">
@@ -12,32 +13,21 @@ const List = () => {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell></Table.HeaderCell>
+
                 <Table.HeaderCell>Employee ID</Table.HeaderCell>
                 <Table.HeaderCell>Email</Table.HeaderCell>
                 <Table.HeaderCell>Mobile</Table.HeaderCell>
                 <Table.HeaderCell>Join Date</Table.HeaderCell>
                 <Table.HeaderCell>Role</Table.HeaderCell>
+                <Table.HeaderCell>Action</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
+          </Table>
+          <Table singleLine className="table table-striped align-middle">
             <Table.Body>
-              {Data.map((el) => {
-                return (
-                  <Table.Row key={el.id} style={{ justifyContent: "center" }}>
-                    <Table.Cell style={{ width: "35px" }}>
-                      <img style={{ width: "35px" }} src={el.path} />
-                    </Table.Cell>
-                    <Table.Cell style={{ color: "orange", textAlign: "left" }}>
-                      {el.name}
-                    </Table.Cell>
-                    <Table.Cell>{el.empid}</Table.Cell>
-                    <Table.Cell>{el.email}</Table.Cell>
-                    <Table.Cell>{el.mobile}</Table.Cell>
-                    <Table.Cell>{el.joindate}</Table.Cell>
-                    <Table.Cell>{el.Role}</Table.Cell>
-                  </Table.Row>
-                );
-              })}
+              <Table.Row>
+                <Table.Cell>{props.emp}</Table.Cell>
+              </Table.Row>
             </Table.Body>
           </Table>
         </div>

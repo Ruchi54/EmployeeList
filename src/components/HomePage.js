@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "./Form";
 import Grid from "./Grid";
 import List from "./List";
 import "../style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { BrowserRouter, Link } from "react-router-dom";
+import { Table } from "semantic-ui-react";
+//import Employee from "./Employee";
+
 const HomePage = () => {
   const [open, Setisopen] = useState(false);
 
@@ -35,6 +39,10 @@ const HomePage = () => {
   //Department
   const [department, setDepartment] = useState("");
   const [departmentErr, setDepartmentErr] = useState(false);
+
+  //Company
+  const [company, setCompany] = useState("");
+  const [companyErr, setCompanyErr] = useState(false);
 
   //Designation
   const [deg, setDeg] = useState("");
@@ -162,6 +170,19 @@ const HomePage = () => {
     setDepartment(department);
   };
 
+  //Company Validation
+
+  const companyValidation = (event) => {
+    let company = event.target.value;
+
+    if (company.length === 0) {
+      setCompanyErr(true);
+    } else {
+      setCompanyErr(false);
+    }
+    setCompany(company);
+  };
+
   //Designation Validation
   const degValidation = (event) => {
     let deg = event.target.value;
@@ -174,15 +195,96 @@ const HomePage = () => {
     setDeg(deg);
   };
 
+  const [datas, setDatas] = useState([]);
+
+  //Edit user data from form
+  const [editData, setEditData] = useState("");
+
   const submitForm = (event) => {
     event.preventDefault();
+    //alert("hello");
 
-    if (employee.length === 0) {
-    } else {
-    }
+    const newData = {
+      id: new Date().getTime(),
+      name: txt,
+      lastname: txtt,
+      empid: emplid,
+      email: email,
+      phone: num,
+      joiningdate: date,
+      designation: deg,
+    };
+
+    setDatas([...datas].concat(newData));
+    setTxt("");
+    setTxtt("");
+    setAlpha("");
+    setEmplid("");
+    setNum("");
+    setEmail("");
+    setDate("");
+    setDepartment("");
+    setCompany("");
+    setDeg("");
   };
 
-  //Grid List state
+  const deleteTodo = (id) => {
+    const updateData = [...datas].filter((data) => data.id !== id);
+
+    setDatas(updateData);
+  };
+
+  //Edit Form
+
+  /*const editTodo = (id) => {
+  const updateddata = [...datas].map((data) => {
+  if (data.id === id) {
+  data.name = editingData;
+  data.lastname = editingLastname;
+  data.empid = editingEmpId;
+  data.email = editingEmail;
+  data.phone = editingPhone;
+  data.joiningdate = editingDate;
+  data.designation = editingDeg;
+  }
+  return data;
+  });
+ 
+  //console.log(updateddata);
+  setDatas(updateddata);
+ 
+  setDataEditing(null);
+  setEditingData("");
+  setEditingLastName("");
+  };*/
+
+  const editTodo = () => {
+    const updateddata = [...datas].map((data) => {
+      if (data.id === editData.id) {
+        data = editData;
+      }
+      return data;
+    });
+    console.log("edittttt", updateddata);
+    setDatas(updateddata);
+    setEditData("");
+  };
+
+  //Save and retrive data in localstorage
+  useEffect(() => {
+    const json = JSON.stringify(datas);
+    localStorage.setItem("data", json);
+  }, [datas]);
+
+  useEffect(() => {
+    const json = localStorage.getItem("data");
+    const loaddata = JSON.parse(json);
+    if (loaddata) {
+      setDatas(loaddata);
+    }
+  }, []);
+
+  //Grid List state toggle
   const [active, Setactive] = useState("List");
 
   const togglePopup = () => {
@@ -205,11 +307,6 @@ const HomePage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Hello");
-  };
-
   return (
     <div>
       <nav className="navbar navbar-light bg-light">
@@ -218,13 +315,20 @@ const HomePage = () => {
             Employee
           </a>
           <div class="d-flex">
-            <button className="display" onClick={() => Setactive("Grid")}>
-              <FontAwesomeIcon icon="fa-solid fa-grip" />
-            </button>
+            <BrowserRouter>
+              <Link to="/employees?type=grid">
+                <button className="display" onClick={() => Setactive("Grid")}>
+                  <FontAwesomeIcon icon="fa-solid fa-grip" />
+                </button>
+              </Link>
 
-            <button className="display" onClick={() => Setactive("List")}>
-              <FontAwesomeIcon icon="fa-solid fa-bars" />
-            </button>
+              <Link to="/employees?type=list">
+                <button className="display" onClick={() => Setactive("List")}>
+                  <FontAwesomeIcon icon="fa-solid fa-bars" />
+                </button>
+              </Link>
+            </BrowserRouter>
+
             <button
               type="submit"
               className="btn btn-warning rounded-pill"
@@ -243,7 +347,7 @@ const HomePage = () => {
       {open && (
         <Form
           handleClose={togglePopup}
-          onSubmit={handleSubmit}
+          //onSubmit={handleSubmit}
           content={
             <>
               <h2>Add Employee</h2>
@@ -262,6 +366,7 @@ const HomePage = () => {
 
                   <input
                     type="text"
+                    name="firstname"
                     className="form-control"
                     id="inputEmail4"
                     onChange={empValidation}
@@ -277,6 +382,7 @@ const HomePage = () => {
                   </label>
                   <input
                     type="text"
+                    name="lastname"
                     className="form-control"
                     id="inputPassword4"
                     onChange={emplastValidation}
@@ -292,6 +398,7 @@ const HomePage = () => {
                   </label>
                   <input
                     type="text"
+                    name="username"
                     className="form-control"
                     id="inputEmail4"
                     onChange={userValidation}
@@ -307,9 +414,11 @@ const HomePage = () => {
                   </label>
                   <input
                     type="email"
+                    name="email"
                     className="form-control"
                     id="inputEmail4"
                     onChange={emailValidation}
+                    value={email}
                   />
                 </div>
                 <div className="col-md-6">
@@ -321,6 +430,7 @@ const HomePage = () => {
                   </label>
                   <input
                     type="text"
+                    name="empid"
                     className="form-control"
                     id="inputEmail4"
                     onChange={empidValidation}
@@ -336,10 +446,11 @@ const HomePage = () => {
                   </label>
                   <input
                     type="date"
+                    name="date"
                     className="form-control"
                     id="date"
-                    name="date"
                     onChange={dateValidation}
+                    value={date}
                   />
                 </div>
                 <div className="col-md-6">
@@ -348,6 +459,7 @@ const HomePage = () => {
                   </label>
                   <input
                     type="number"
+                    name="phone"
                     className="form-control"
                     id="inputPhone4"
                     onChange={onPhone}
@@ -358,7 +470,12 @@ const HomePage = () => {
                   <label for="inputCompany" className="form-label">
                     Company
                   </label>
-                  <select id="inputCompany" className="form-select">
+                  <select
+                    id="inputCompany"
+                    className="form-select"
+                    value={company}
+                    onChange={companyValidation}
+                  >
                     <option selected></option>
                     <option>Global Technologies</option>
                     <option>Delta Infotech</option>
@@ -380,6 +497,7 @@ const HomePage = () => {
                     id="inputDepartment"
                     className="form-select"
                     onChange={departmentValidation}
+                    value={department}
                   >
                     <option selected></option>
                     <option>Web Development</option>
@@ -398,6 +516,7 @@ const HomePage = () => {
                     id="inputDesignation"
                     className="form-select"
                     onChange={degValidation}
+                    value={deg}
                   >
                     <option selected></option>
                     <option>Web Designer</option>
@@ -408,7 +527,7 @@ const HomePage = () => {
 
                 <div className="col-12">
                   <button
-                    //onSubmit={submitForm}
+                    onSubmit={submitForm}
                     style={{
                       backgroundColor: "orange",
                       height: "45px",
@@ -426,7 +545,294 @@ const HomePage = () => {
           }
         />
       )}
-      {active === "List" && <List />}
+
+      {active === "List" && (
+        <List
+          emp={
+            <Table singleLine className="table table-striped">
+              <Table.Body>
+                {datas.map((el) => {
+                  return (
+                    <div key={el.id}>
+                      {editData.id === el.id ? (
+                        <div>
+                          <h2>Edit Employee</h2>
+                          <form className="row g-3" onSubmit={submitForm}>
+                            <div className="col-md-6">
+                              <label for="inputEmail4" className="form-label">
+                                FirstName
+                              </label>
+
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="inputEmail4"
+                                key="firstname"
+                                onChange={(e) => {
+                                  setEditData({
+                                    ...editData,
+                                    ["name"]: e.target.value,
+                                  });
+                                }}
+                                defaultValue={editData.name}
+                              />
+                            </div>
+                            <div className="col-md-6">
+                              <label
+                                for="inputPassword4"
+                                className="form-label"
+                              >
+                                LastName
+                              </label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="inputPassword4"
+                                onChange={(e) => {
+                                  setEditData({
+                                    ...editData,
+                                    ["lastname"]: e.target.value,
+                                  });
+                                }}
+                                defaultValue={editData.lastname}
+                              />
+                            </div>
+
+                            <div className="col-md-6">
+                              <label for="inputEmail4" className="form-label">
+                                Email
+                              </label>
+                              <input
+                                type="email"
+                                className="form-control"
+                                id="inputEmail4"
+                                onChange={(e) => {
+                                  setEditData({
+                                    ...editData,
+                                    ["email"]: e.target.value,
+                                  });
+                                }}
+                                defaultValue={editData.email}
+                              />
+                            </div>
+                            <div className="col-md-6">
+                              <label for="inputEmail4" className="form-label">
+                                EmployeeID
+                              </label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="inputEmail4"
+                                onChange={(e) => {
+                                  setEditData({
+                                    ...editData,
+                                    ["empid"]: e.target.value,
+                                  });
+                                }}
+                                defaultValue={editData.empid}
+                              />
+                            </div>
+                            <div className="col-md-6">
+                              <label for="inputEmail4" className="form-label">
+                                JoiningDate
+                              </label>
+                              <input
+                                type="date"
+                                className="form-control"
+                                id="date"
+                                name="date"
+                                onChange={(e) => {
+                                  setEditData({
+                                    ...editData,
+                                    ["joiningdate"]: e.target.value,
+                                  });
+                                }}
+                                defaultValue={editData.joiningdate}
+                              />
+                            </div>
+                            <div className="col-md-6">
+                              <label for="inputPhone4" className="form-label">
+                                Phone
+                              </label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                id="inputPhone4"
+                                onChange={(e) => {
+                                  setEditData({
+                                    ...editData,
+                                    ["phone"]: e.target.value,
+                                  });
+                                }}
+                                value={editData.phone}
+                              />
+                            </div>
+
+                            <div className="col-md-6">
+                              <label
+                                for="inputDesignation"
+                                className="form-label"
+                              >
+                                Designation
+                              </label>
+                              <select
+                                id="inputDesignation"
+                                className="form-select"
+                                onChange={(e) => {
+                                  setEditData({
+                                    ...editData,
+                                    ["designation"]: e.target.value,
+                                  });
+                                }}
+                                defaultValue={editData.designation}
+                              >
+                                <option selected></option>
+                                <option>Web Designer</option>
+                                <option>Web Developer</option>
+                                <option>Android Developer</option>
+                              </select>
+                            </div>
+
+                            <div className="col-12">
+                              <button
+                                onClick={() => editTodo()}
+                                style={{
+                                  backgroundColor: "orange",
+                                  height: "45px",
+                                  width: "150px",
+                                  color: "white",
+                                }}
+                                type="submit"
+                                className="btn btn-warning rounded-pill"
+                              >
+                                Submit
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="main_row">
+                            <div className="row">
+                              <div className="column_List">
+                                <Table
+                                  singleLine
+                                  className="table table-striped"
+                                >
+                                  <Table.Row
+                                    singleLine
+                                    key={el.id}
+                                    style={{ justifyContent: "left" }}
+                                  >
+                                    <Table.Cell
+                                      style={{
+                                        color: "orange",
+                                        textAlign: "left",
+                                        paddingLeft: "30px",
+                                      }}
+                                    >
+                                      {el.name}
+                                      <span
+                                        style={{ paddingLeft: "2px" }}
+                                      ></span>
+                                      {el.lastname}
+                                    </Table.Cell>
+                                    <Table.Cell
+                                      style={{ paddingLeft: "240px" }}
+                                    >
+                                      {el.empid}
+                                    </Table.Cell>
+                                    <Table.Cell
+                                      style={{ paddingLeft: "200px" }}
+                                    >
+                                      {el.email}
+                                    </Table.Cell>
+                                    <Table.Cell
+                                      style={{ paddingLeft: "100px" }}
+                                    >
+                                      {el.phone}
+                                    </Table.Cell>
+                                    <Table.Cell
+                                      style={{ paddingLeft: "200px" }}
+                                    >
+                                      {el.joiningdate}
+                                    </Table.Cell>
+                                    <Table.Cell
+                                      style={{ paddingLeft: "200px" }}
+                                    >
+                                      {el.designation}
+                                    </Table.Cell>
+
+                                    <Table.Cell>
+                                      <div
+                                        className="dropdown"
+                                        style={{ paddingLeft: "100px" }}
+                                      >
+                                        <button
+                                          className="btn btn-secondary dropdown-toggle"
+                                          type="button"
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false"
+                                        >
+                                          <FontAwesomeIcon icon="fa-solid fa-ellipsis-vertical" />
+                                        </button>
+                                        <ul
+                                          className="dropdown-menu"
+                                          style={{
+                                            backgroundColor: "lightgray",
+                                          }}
+                                        >
+                                          <li>
+                                            <a className="dropdown-item">
+                                              <button
+                                                style={{
+                                                  border: "none",
+                                                  backgroundColor: "lightgray",
+                                                }}
+                                                onClick={() => setEditData(el)}
+                                              >
+                                                <FontAwesomeIcon icon="fa-solid fa-pencil" />
+                                                Edit
+                                              </button>
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a
+                                              className="dropdown-item"
+                                              href="#"
+                                            >
+                                              <button
+                                                style={{
+                                                  border: "none",
+                                                  backgroundColor: "lightgray",
+                                                }}
+                                                onClick={() =>
+                                                  deleteTodo(el.id)
+                                                }
+                                              >
+                                                <FontAwesomeIcon icon="fa-solid fa-trash-can" />
+                                                Delete
+                                              </button>
+                                            </a>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </Table.Cell>
+                                  </Table.Row>
+                                </Table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </Table.Body>
+            </Table>
+          }
+        />
+      )}
       {active === "Grid" && <Grid />}
     </div>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import Data from "../data.json";
 import "../style.css";
+import Employee from "./Employee";
 
 const Grid = () => {
   return (
@@ -8,19 +9,21 @@ const Grid = () => {
       <div className="row">
         <div>
           <div>
-            {Data.map((el) => {
+            {Data.map((el, index) => {
               return (
-                <div className="column" style={{ backgroundColor: "white" }}>
-                  <div key={el.id}></div>
-                  <div>
-                    <div>
-                      <img style={{ width: "60px" }} src={el.path}></img>
-                    </div>
-                    <div style={{ fontWeight: "bold" }}>{el.name}</div>
-                    <div>{el.Role}</div>
-                  </div>
-                  <br></br>
-                </div>
+                <>
+                  <Employee
+                    key={index}
+                    img={el.path}
+                    name={el.name}
+                    role={el.Role}
+                    empid={el.empid}
+                    date={el.joindate}
+                    phone={el.mobile}
+                    email={el.email}
+                    link={`/employees/${el.id}`}
+                  />
+                </>
               );
             })}
           </div>
